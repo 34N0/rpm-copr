@@ -1,4 +1,4 @@
-package copr
+package repo
 
 import (
 	"bytes"

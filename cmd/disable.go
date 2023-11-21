@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/34N0/rpm-copr/pkg/copr"
+	"github.com/34N0/rpm-copr/pkg/repo"
 	"github.com/spf13/cobra"
 )
 
@@ -10,7 +10,7 @@ var disableCmd = &cobra.Command{
 	Use:   "disable",
 	Short: "Disable the name/project Copr repository",
 	Run: func(cmd *cobra.Command, args []string) {
-		copr.NewCopr(args).Disable()
+		repo.NewCopr(args).Disable()
 	},
 }
 
