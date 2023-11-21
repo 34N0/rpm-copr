@@ -14,7 +14,7 @@ var rootCmd = &cobra.Command{
 	Use:     "rpm-copr",
 	Version: "v0.8-alpha",
 	Short:   "Interact with Copr repositories.",
-	Long:    `rpm-copr is a Command Line Interface that ports the COPR dnf plugin to immutable (OSTree) images.`,
+	Long:    `rpm-copr is a Command Line Interface that ports the COPR dnf command to immutable (OSTree) images.`,
 }
 
 func Execute() {
