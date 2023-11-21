@@ -3,7 +3,10 @@
 ⚠️ This utility serves as a workaround until the functionality is implemented in ```rpm-otsree```.
 
 ## Install
-As of now download the latest release and extract manually.
+
+```bash
+curl -L https://github.com/34N0/rpm-copr/releases/download/v0.8-alpha/rpm-copr-v0.8-alpha-linux-amd64.tar.gz | sudo tar zx -C /usr/local/bin
+```
 
 ## Usage
 ```bash
