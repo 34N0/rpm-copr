@@ -22,6 +22,7 @@ type Repo interface {
 	getRepoConfig() string
 	getRepoFilePath() string
 	Enable()
+	Disable()
 }
 
 // Initialize new Copr if Argument matches the {Author}/{Reponame} pattern
@@ -110,5 +111,22 @@ func (c Copr) Enable() {
 	}
 
 	log.Println("Enabled COPR Repo " + c.Author + "/" + c.Reponame)
+	os.Exit(0)
+}
+
+func (c Copr) Disable() {
+	configPath := c.getRepoFilePath()
+
+	if fileExists(configPath) {
+		err := os.Remove(configPath)
+		if err != nil {
+			log.Fatal("Error removing .repo file:", err)
+		}
+
+		log.Println("Disabled COPR Repo " + c.Author + "/" + c.Reponame)
+		os.Exit(0)
+	}
+
+	log.Println("No COPR Repo " + c.Author + "/" + c.Reponame + " is enabled")
 	os.Exit(0)
 }
