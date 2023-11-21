@@ -9,7 +9,7 @@ curl -L https://github.com/34N0/rpm-copr/releases/download/v0.8-alpha/rpm-copr-v
 ```
 
 ## Usage
-```bash
+```
 rpm-copr is a Command Line Interface that ports the COPR dnf plugin to immutable (OSTree) images.
 
 Usage:
