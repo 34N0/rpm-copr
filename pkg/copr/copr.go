@@ -1,7 +1,11 @@
 package copr
 
 import (
+	"bytes"
+	"html/template"
+	"io"
 	"log"
+	"net/http"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -36,9 +40,42 @@ func NewCopr(args []string) Copr {
 		log.Fatal("Error executing rpm command: ", err)
 	}
 
-	return Copr{args[0], args[1], string(out)}
+	return Copr{args[0], args[1], string(out)[:2]}
+}
+
+// Get .repo config from https://copr.fedorainfracloud.org/
+func (c Copr) getRepoConfig() string {
+
+	tmpl := template.Must(template.New("url").Parse(
+		"https://copr.fedorainfracloud.org/coprs/{{.Author}}/{{.Reponame}}/repo/fedora-{{.ReleaseServer}}/{{.Author}}-{{.Reponame}}-fedora-.repo",
+	))
+
+	buf := new(bytes.Buffer)
+
+	if err := tmpl.Execute(buf, c); err != nil {
+		log.Fatal("Error executing template: ", err)
+	}
+
+	url := buf.String()
+
+	res, err := http.Get(url)
+
+	if err != nil {
+		log.Fatal("Error requesting repo config: ", err)
+	} else if res.StatusCode != 200 {
+		log.Fatalf("Error requesting repo config: " + res.Status)
+	}
+
+	body, err := io.ReadAll(res.Body)
+
+	if err != nil {
+		log.Fatal("Error reading request body: ", err)
+	}
+
+	return string(body)
 }
 
 func (c Copr) Enable() {
-
+	config := c.getRepoConfig()
+	print(config)
 }
