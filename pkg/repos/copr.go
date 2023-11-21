@@ -2,6 +2,8 @@ package repos
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"html/template"
 	"io"
 	"log"
@@ -101,12 +103,36 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+func writeEnabled(configPath string, enable int) error {
+	if !fileExists(configPath) {
+		return errors.New("File does not exist!")
+	}
+	if read, err := os.ReadFile(configPath); err != nil {
+		return err
+
+	} else {
+		if err := os.WriteFile(
+			configPath,
+			[]byte(
+				strings.Replace(string(read),
+					"enabled="+fmt.Sprint(1-enable), "enabled="+fmt.Sprint(enable), -1)), 0); err != nil {
+			return err
+		} else {
+			return nil
+		}
+	}
+}
+
 func (c Copr) Enable() {
 	configPath := c.getRepoFilePath()
 
 	if fileExists(configPath) {
-		log.Println("COPR Repo " + c.Author + "/" + c.Reponame + " is allready enabled")
-		os.Exit(0)
+		if err := writeEnabled(configPath, 1); err != nil {
+			log.Fatal("Error Disabling COPR repo", err)
+		} else {
+			log.Println("Enabled COPR Repo " + c.Author + "/" + c.Reponame)
+			os.Exit(0)
+		}
 	}
 
 	config := c.getRepoConfig()
@@ -118,6 +144,22 @@ func (c Copr) Enable() {
 
 	log.Println("Enabled COPR Repo " + c.Author + "/" + c.Reponame)
 	os.Exit(0)
+}
+
+func (c Copr) Disable() {
+	configPath := c.getRepoFilePath()
+
+	if !fileExists(configPath) {
+		log.Println("No COPR Repo " + c.Author + "/" + c.Reponame + " is enabled")
+		os.Exit(0)
+	}
+
+	if err := writeEnabled(configPath, 0); err != nil {
+		log.Fatal("Error Disabling COPR repo", err)
+	} else {
+		log.Println("Disabled COPR Repo " + c.Author + "/" + c.Reponame)
+		os.Exit(0)
+	}
 }
 
 func (c Copr) Remove() {
