@@ -25,6 +25,10 @@ type Repo interface {
 	Disable()
 }
 
+const (
+	HUB string = "copr.fedorainfracloud.org"
+)
+
 // Initialize new Copr if Argument matches the {Author}/{Reponame} pattern
 func NewCopr(args []string) Copr {
 	repoP := "[A-Za-z]+/[A-Za-z]+"
@@ -32,7 +36,9 @@ func NewCopr(args []string) Copr {
 	if match, err := regexp.MatchString(repoP, args[0]); err != nil {
 		log.Fatal(err)
 	} else if !match {
-		log.Fatalf("Repository Identifier must match {Author}/{Reponame} pattern.")
+		log.Fatalf(
+			"Bad Copr Project Format Error: use format `copr_username/copr_projectname` to reference copr project",
+		)
 	}
 	args = strings.Split(args[0], "/")
 
@@ -48,7 +54,7 @@ func NewCopr(args []string) Copr {
 // Get .repo config from https://copr.fedorainfracloud.org/
 func (c Copr) getRepoConfig() string {
 	tmpl := template.Must(template.New("url").Parse(
-		"https://copr.fedorainfracloud.org/coprs/{{.Author}}/{{.Reponame}}/repo/fedora-{{.ReleaseServer}}/{{.Author}}-{{.Reponame}}-fedora-.repo",
+		"https://" + HUB + "/coprs/{{.Author}}/{{.Reponame}}/repo/fedora-{{.ReleaseServer}}/{{.Author}}-{{.Reponame}}-fedora-.repo",
 	))
 
 	buf := new(bytes.Buffer)
@@ -76,7 +82,7 @@ func (c Copr) getRepoConfig() string {
 
 func (c Copr) getRepoFilePath() string {
 	tmpl := template.Must(template.New("path").Parse(
-		"/etc/yum.repos.d/{{.Author}}-{{.Reponame}}.repo",
+		"/etc/yum.repos.d/_copr:" + HUB + ":{{.Author}}:{{.Reponame}}.repo",
 	))
 
 	buf := new(bytes.Buffer)
