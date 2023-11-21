@@ -20,13 +20,6 @@ type Copr struct {
 	ReleaseServer string
 }
 
-type Repo interface {
-	getRepoConfig() string
-	getRepoFilePath() string
-	Enable()
-	Disable()
-}
-
 const (
 	HUB string = "copr.fedorainfracloud.org"
 )
@@ -177,4 +170,22 @@ func (c Copr) Remove() {
 
 	log.Println("No COPR Repo " + c.Author + "/" + c.Reponame + " is enabled")
 	os.Exit(0)
+}
+
+func ListCoprs() {
+	configFiles, err := os.ReadDir("/etc/yum.repos.d/")
+
+	if err != nil {
+		log.Fatal("Error listing coprs:", err)
+	}
+
+	for _, file := range configFiles {
+		fname := file.Name()
+		if strings.HasPrefix(fname, "_copr:") {
+			fname = strings.TrimPrefix(file.Name(), "_copr:")
+			fname = strings.TrimSuffix(fname, ".repo")
+			fname = strings.ReplaceAll(fname, ":", "/")
+			fmt.Println(fname)
+		}
+	}
 }
