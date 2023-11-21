@@ -1,37 +1,21 @@
-# workflow name
-name: release
+# .github/workflows/release.yaml
 
-# on events
 on:
   release:
-    types:
-      - created
+    types: [created]
 
-# jobs
+permissions:
+    contents: write
+    packages: write
+
 jobs:
-  # generate build cross-platform build files
-  generate:
-    name: Generate cross-platform builds
+  release-linux-amd64:
+    name: release linux/amd64
     runs-on: ubuntu-latest
     steps:
-      # step 1: checkout repository code inside the workspace directory of the runner
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-
-      # step 2: generate build files and dump inside the workspace directory of the runner
-      - name: Generate build files
-        uses: thatisuday/go-build-action@v1
-        with:
-          platforms: "linux/amd64"
-          package: "demo"
-          name: "math"
-          compress: "true"
-          dest: "dist"
-
-      # step 3: Copy build-artifacts in the GitHub release
-      - name: Copy build-artifacts
-        uses: skx/github-action-publish-binaries@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: "./dist/*.tar.gz"
+    - uses: actions/checkout@v3
+    - uses: wangyoucao577/go-release-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: linux
+        goarch: amd64
