@@ -8,8 +8,6 @@ curl -L https://github.com/34N0/rpm-copr/releases/download/v0.9-beta/rpm-copr-v0
 
 ## Usage
 ```
-rpm-copr is a Command Line Interface that ports the COPR dnf plugin to immutable (OSTree) images.
-
 Usage:
   rpm-copr [command]
 
@@ -18,12 +16,12 @@ Available Commands:
   disable     Disable the copr repository
   enable      Enable the copr repository
   help        Help about any command
+  list        List local copr repositories
   remove      Remove the copr repository
 
 Flags:
-  -h, --help   help for rpm-copr
-
-Use "rpm-copr [command] --help" for more information about a command.
+  -h, --help      help for rpm-copr
+  -v, --version   version for rpm-copr
 ```
 
 ### Contributing
