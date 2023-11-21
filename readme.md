@@ -3,6 +3,7 @@
 ⚠️ This utility serves as a workaround until the functionality is implemented in ```rpm-otsree```.
 
 ## Install
+As of now download the latest release and extract manually.
 
 ## Usage
 ```bash
