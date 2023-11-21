@@ -12,6 +12,8 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
+
+	"github.com/spf13/pflag"
 )
 
 type Copr struct {
@@ -172,15 +174,36 @@ func (c Copr) Remove() {
 	os.Exit(0)
 }
 
-func ListCoprs() {
-	configFiles, err := os.ReadDir("/etc/yum.repos.d/")
+func ListCoprs(flags *pflag.FlagSet) {
+	repoConfigs, err := os.ReadDir("/etc/yum.repos.d/")
 
 	if err != nil {
 		log.Fatal("Error listing coprs:", err)
 	}
 
-	for _, file := range configFiles {
+	for _, file := range repoConfigs {
 		fname := file.Name()
+
+		if en, _ := flags.GetBool("enabled"); en {
+			c, err := os.ReadFile("/etc/yum.repos.d/" + fname)
+			if err != nil {
+				log.Fatal("Error listing coprs:", err)
+			}
+			if !strings.Contains(string(c), "enabled=1") {
+				break
+			}
+		}
+
+		if en, _ := flags.GetBool("disabled"); en {
+			c, err := os.ReadFile("/etc/yum.repos.d/" + fname)
+			if err != nil {
+				log.Fatal("Error listing coprs:", err)
+			}
+			if !strings.Contains(string(c), "enabled=0") {
+				break
+			}
+		}
+
 		if strings.HasPrefix(fname, "_copr:") {
 			fname = strings.TrimPrefix(file.Name(), "_copr:")
 			fname = strings.TrimSuffix(fname, ".repo")
