@@ -1,4 +1,6 @@
-#  ⏳ 
+#  ⏳ rpm-copr
+
+rpm-copr is a Command Line Interface that ports the COPR dnf command to immutable (OSTree) images. This makes it possible for Fedora Silverblue and Fedora Kyonite users to use COPR repositories in a safe and intuitive way.
 
 ## Install
 
@@ -24,6 +26,6 @@ Flags:
   -v, --version   version for rpm-copr
 ```
 
-### Contributing
+## Contributing
 
 Feel free to open issues or pull requests for improvements, bug fixes, or new features. We welcome your contributions!
