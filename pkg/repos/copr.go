@@ -77,6 +77,7 @@ func (c Copr) getRepoConfig() string {
 	return string(body)
 }
 
+// red the .repo file in /etc/yum.repos.d
 func (c Copr) getRepoFilePath() string {
 	tmpl := template.Must(template.New("path").Parse(
 		"/etc/yum.repos.d/_copr:" + HUB + ":{{.Author}}:{{.Reponame}}.repo",
@@ -98,26 +99,28 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+// either writes enabled=1 order enabled=0 into the repo file
 func writeEnabled(configPath string, enable int) error {
 	if !fileExists(configPath) {
 		return errors.New("File does not exist!")
 	}
-	if read, err := os.ReadFile(configPath); err != nil {
+	read, err := os.ReadFile(configPath)
+	if err != nil {
 		return err
+	}
 
+	if err := os.WriteFile(
+		configPath,
+		[]byte(
+			strings.Replace(string(read),
+				"enabled="+fmt.Sprint(1-enable), "enabled="+fmt.Sprint(enable), -1)), 0); err != nil {
+		return err
 	} else {
-		if err := os.WriteFile(
-			configPath,
-			[]byte(
-				strings.Replace(string(read),
-					"enabled="+fmt.Sprint(1-enable), "enabled="+fmt.Sprint(enable), -1)), 0); err != nil {
-			return err
-		} else {
-			return nil
-		}
+		return nil
 	}
 }
 
+// if repo is installed, it enables ist otherwise it installes it
 func (c Copr) Enable() {
 	configPath := c.getRepoFilePath()
 
@@ -141,6 +144,7 @@ func (c Copr) Enable() {
 	os.Exit(0)
 }
 
+// if repo is enabled it disables it
 func (c Copr) Disable() {
 	configPath := c.getRepoFilePath()
 
@@ -157,6 +161,7 @@ func (c Copr) Disable() {
 	}
 }
 
+// remove the repo file
 func (c Copr) Remove() {
 	configPath := c.getRepoFilePath()
 
@@ -174,6 +179,7 @@ func (c Copr) Remove() {
 	os.Exit(0)
 }
 
+// list installed coprs
 func ListCoprs(flags *pflag.FlagSet) {
 	repoConfigs, err := os.ReadDir("/etc/yum.repos.d/")
 

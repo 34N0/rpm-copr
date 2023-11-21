@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// enableCmd represents the enable command
 var disableCmd = &cobra.Command{
 	Use:   "disable",
 	Short: "Disable the copr repository",
