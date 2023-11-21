@@ -120,7 +120,7 @@ func (c Copr) Enable() {
 	os.Exit(0)
 }
 
-func (c Copr) Disable() {
+func (c Copr) Remove() {
 	configPath := c.getRepoFilePath()
 
 	if fileExists(configPath) {
@@ -129,7 +129,7 @@ func (c Copr) Disable() {
 			log.Fatal("Error removing .repo file:", err)
 		}
 
-		log.Println("Disabled COPR Repo " + c.Author + "/" + c.Reponame)
+		log.Println("Removed COPR Repo " + c.Author + "/" + c.Reponame)
 		os.Exit(0)
 	}
 
