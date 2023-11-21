@@ -95,7 +95,6 @@ func fileExists(filename string) bool {
 }
 
 func (c Copr) Enable() {
-
 	configPath := c.getRepoFilePath()
 
 	if fileExists(configPath) {
