@@ -38,3 +38,7 @@ func NewCopr(args []string) Copr {
 
 	return Copr{args[0], args[1], string(out)}
 }
+
+func (c Copr) Enable() {
+
+}

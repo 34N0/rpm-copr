@@ -14,7 +14,7 @@ var enableCmd = &cobra.Command{
 	Short: "Enable the name/project Copr repository",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		copr.NewCopr(args)
+		copr.NewCopr(args).Enable()
 	},
 }
 
