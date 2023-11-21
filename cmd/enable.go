@@ -8,7 +8,7 @@ import (
 // enableCmd represents the enable command
 var enableCmd = &cobra.Command{
 	Use:   "enable",
-	Short: "Enable the name/project Copr repository",
+	Short: "Enable the copr repository",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		repos.NewCopr(args).Enable()

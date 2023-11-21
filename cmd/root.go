@@ -12,7 +12,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "rpm-copr",
-	Short: "Work with Copr & Playground repositories on the local system.",
+	Short: "Interact with Copr repositories.",
 	Long:  `rpm-copr is a Command Line Interface that ports the COPR dnf plugin to immutable (OSTree) images.`,
 }
 
