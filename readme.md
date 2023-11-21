@@ -14,9 +14,10 @@ Usage:
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
-  disable     Disable the name/project Copr repository
-  enable      Enable the name/project Copr repository
+  disable     Disable the copr repository
+  enable      Enable the copr repository
   help        Help about any command
+  remove      Remove the copr repository
 
 Flags:
   -h, --help   help for rpm-copr
